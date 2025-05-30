@@ -6,7 +6,6 @@ interface ApiOfferWrapper {
     name: string;
     price: string;            
     currency_iso: string;
-    currency_symbol: string;
     link: string;
   };
   merchant: {
