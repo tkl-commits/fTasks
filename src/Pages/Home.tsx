@@ -13,7 +13,7 @@ export default function Home() {
         textAlign: 'center',
       }}
     >
-      <h1>Future PLC Coding Tasks</h1>
+      <h1>Fun Future Tasks</h1>
       <ul style={{ listStyle: 'none', padding: 0 }}>
         <li style={{ margin: '1rem 0' }}>
           <Link to="/widget">Widget Task</Link>
