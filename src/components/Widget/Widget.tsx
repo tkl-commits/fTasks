@@ -26,7 +26,7 @@ interface ApiResponse {
 const WIDGET_API =
   'https://search-api.fie.future.net.uk/widget.php?model_name=xbox_one_s&area=US&rows=10';
 
-export default function Widget() {
+const Widget: React.FC =()=> {
   const [offers, setOffers] = useState<ApiOfferWrapper[]>([]);
   const [error, setError] = useState<string | null>(null);
 
@@ -60,7 +60,7 @@ export default function Widget() {
         }}
       >
         {/* Header Row */}
-        {['Image', 'Name', 'Price', 'Link', 'Merchant'].map(hdr => (
+        {['Image', 'Name', 'Price', 'Merchant', 'Link'].map(hdr => (
           <Cell key={hdr} header>
             {hdr}
           </Cell>
@@ -79,16 +79,16 @@ export default function Widget() {
               {item.offer.currency_iso} {item.offer.price}
             </Cell>
             <Cell>
-              <a href={item.offer.link} target="_blank" rel="noopener noreferrer">
-                View
-              </a>
-            </Cell>
-            <Cell>
               {item.merchant.logo_url ? (
-                <img src={item.merchant.logo_url} alt={item.merchant.name} style={{ maxHeight: 24 }} />
+                <img src={item.merchant.logo_url} alt={item.merchant.name} style={{ maxHeight: 50 }} />
               ) : (
                 item.merchant.name
               )}
+            </Cell>
+            <Cell>
+              <a href={item.offer.link} target="_blank" rel="noopener noreferrer">
+                View
+              </a>
             </Cell>
           </React.Fragment>
         ))}
@@ -96,3 +96,5 @@ export default function Widget() {
     </div>
   );
 }
+
+export default Widget;
