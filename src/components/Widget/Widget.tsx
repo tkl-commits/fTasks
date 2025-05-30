@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import Cell from './Cell';
 
 interface ApiOfferWrapper {
   image?: string;
@@ -47,7 +48,8 @@ export default function Widget() {
     return <div style={{ color: 'red' }}>{error}</div>;
   }
 
-  return (
+ return (
+    <div style={{ padding: '1rem' }}>
       <div
         style={{
           display: 'grid',
@@ -58,103 +60,39 @@ export default function Widget() {
         }}
       >
         {/* Header Row */}
-        {['Image', 'Name', 'Price', 'Merchant', 'Link'].map(hdr => (
-          <div
-            key={hdr}
-            style={{
-              padding: '0.5rem',
-              fontWeight: 'bold',
-              borderRight: '2px solid #ccc',
-              borderBottom: '2px solid #ccc',
-              textAlign: 'center',
-            }}
-          >
+        {['Image', 'Name', 'Price', 'Link', 'Merchant'].map(hdr => (
+          <Cell key={hdr} header>
             {hdr}
-          </div>
+          </Cell>
         ))}
 
         {/* Data Rows */}
         {offers.map((item, i) => (
           <React.Fragment key={i}>
-            {/* Image */}
-            <div
-              style={{
-                padding: '0.5rem',
-                borderRight: '2px solid #eee',
-                borderBottom: '2px solid #eee',
-                textAlign: 'center',
-              }}
-            >
+            <Cell>
               {item.image ? (
                 <img src={item.image} alt={item.offer.name} style={{ maxWidth: 80 }} />
-              ) : (
-                '–'
-              )}
-            </div>
-
-            {/* Name */}
-            <div
-              style={{
-                padding: '0.5rem',
-                borderRight: '2px solid #eee',
-                borderBottom: '2px solid #eee',
-              }}
-            >
-              {item.offer.name}
-            </div>
-
-            {/* Price */}
-            <div
-              style={{
-                padding: '0.5rem',
-                borderRight: '2px solid #eee',
-                borderBottom: '2px solid #eee',
-              }}
-            >
-              {item.offer.currency_iso}{' '}
-              {item.offer.price}
-            </div>
-
-            {/* Merchant */}
-            <div
-              style={{
-                padding: '0.5rem',
-                borderRight: '2px solid #eee',
-                borderBottom: '2px solid #eee',
-                textAlign: 'center',
-              }}
-            >
+              ) : '–'}
+            </Cell>
+            <Cell>{item.offer.name}</Cell>
+            <Cell>
+              {item.offer.currency_iso} {item.offer.price}
+            </Cell>
+            <Cell>
+              <a href={item.offer.link} target="_blank" rel="noopener noreferrer">
+                View
+              </a>
+            </Cell>
+            <Cell>
               {item.merchant.logo_url ? (
-                <img
-                  src={item.merchant.logo_url}
-                  alt={item.merchant.name}
-                  style={{ maxHeight: 50 }}
-                />
+                <img src={item.merchant.logo_url} alt={item.merchant.name} style={{ maxHeight: 24 }} />
               ) : (
                 item.merchant.name
               )}
-            </div>
-
-            {/* Link */}
-            <div
-              style={{
-                padding: '0.5rem',
-                borderRight: '2px solid #eee',
-                borderBottom: '2px solid #eee',
-                textAlign: 'center',
-              }}
-            >
-              <a
-                href={item.offer.link}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                View
-              </a>
-            </div>
-
+            </Cell>
           </React.Fragment>
         ))}
       </div>
+    </div>
   );
 }
