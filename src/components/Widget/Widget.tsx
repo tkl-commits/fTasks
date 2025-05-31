@@ -51,17 +51,14 @@ const Widget =()=> {
 
   return (
     <div className="widget-grid">
-      {/* Header Row */}
       {['Image', 'Name', 'Price', 'Merchant', 'Link'].map((hdr) => (
         <Cell key={hdr} header>
           {hdr}
         </Cell>
       ))}
 
-      {/* Data Rows */}
       {offers.map((item, i) => (
         <React.Fragment key={i}>
-          {/* 1) Image */}
           <Cell>
             {item.image ? (
               <img
@@ -73,16 +70,10 @@ const Widget =()=> {
               '–'
             )}
           </Cell>
-
-          {/* 2) Name */}
           <Cell>{item.offer.name}</Cell>
-
-          {/* 3) Price */}
           <Cell>
             {item.offer.currency_iso} {item.offer.price}
           </Cell>
-
-          {/* 4) Merchant */}
           <Cell>
             {item.merchant.logo_url ? (
               <img
@@ -94,8 +85,6 @@ const Widget =()=> {
               item.merchant.name
             )}
           </Cell>
-
-          {/* 5) Link */}
           <Cell>
             <a href={item.offer.link} target="_blank" rel="noopener noreferrer">
               View
