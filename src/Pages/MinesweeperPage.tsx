@@ -15,7 +15,7 @@ const MinesweeperPage: React.FC = () => {
       }}
     >
       <h2>🧨 Minesweeper Generator</h2>
-      <Minesweeper />
+      <Minesweeper rows={15} cols={15} mines={1000} />
       </div>
     </>
   );

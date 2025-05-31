@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import './Minesweeper.css';
 
 interface Cell {
   isMine: boolean;
@@ -11,12 +12,9 @@ interface Props {
   mines?: number;
 }
 
-const cellSize = 30;
 
-// Helper to build an empty grid
 const generateEmptyGrid = (rows: number, cols: number): Cell[][] => {
   const grid: Cell[][] = [];
-
   for (let r = 0; r < rows; r++) {
     const row: Cell[] = [];
     for (let c = 0; c < cols; c++) {
@@ -24,35 +22,41 @@ const generateEmptyGrid = (rows: number, cols: number): Cell[][] => {
     }
     grid.push(row);
   }
-console.log(grid);
   return grid;
 };
 
-const Minesweeper: React.FC<Props> = ({ rows = 15, cols = 15, mines = 30 }) => {
+const Minesweeper: React.FC<Props> = ({
+  rows = 10,
+  cols = 10,
+  mines = 15,
+}) => {
   const [board, setBoard] = useState<Cell[][]>([]);
 
   useEffect(() => {
     const generateBoard = (): Cell[][] => {
-      // 1) Create empty grid
+     
+      const maxMines = rows * cols - 1;
+      if (mines > maxMines) {
+        mines = maxMines;
+      }
+
       const grid = generateEmptyGrid(rows, cols);
 
-      // 2) Randomly place mines
-      let minesPlaced = 0;
-      while (minesPlaced < mines) {
-        const r = Math.floor(Math.random() * rows);
-        const c = Math.floor(Math.random() * cols);
-        if (!grid[r][c].isMine) {
-          grid[r][c].isMine = true;
-          minesPlaced++;
+      let placed = 0;
+      while (placed < mines) {
+        const rIdx = Math.floor(Math.random() * rows);
+        const cIdx = Math.floor(Math.random() * cols);
+        if (!grid[rIdx][cIdx].isMine) {
+          grid[rIdx][cIdx].isMine = true;
+          placed++;
         }
       }
 
-      // 3) Calculate clue numbers for each non-mine cell
       const directions = [
         [-1, -1], [-1, 0], [-1, 1],
-        [0, -1],          [0, 1],
-        [1, -1], [1, 0], [1, 1],
-      ];
+        [ 0, -1],          [ 0, 1],
+        [ 1, -1], [ 1, 0], [ 1, 1],
+      ] as const;
 
       for (let r = 0; r < rows; r++) {
         for (let c = 0; c < cols; c++) {
@@ -62,8 +66,10 @@ const Minesweeper: React.FC<Props> = ({ rows = 15, cols = 15, mines = 30 }) => {
             const nr = r + dr;
             const nc = c + dc;
             if (
-              nr >= 0 && nr < rows &&
-              nc >= 0 && nc < cols &&
+              nr >= 0 &&
+              nr < rows &&
+              nc >= 0 &&
+              nc < cols &&
               grid[nr][nc].isMine
             ) {
               count++;
@@ -79,37 +85,27 @@ const Minesweeper: React.FC<Props> = ({ rows = 15, cols = 15, mines = 30 }) => {
     setBoard(generateBoard());
   }, [rows, cols, mines]);
 
-  // Render the board as a grid of cells
   const renderBoard = () =>
     board.map((row, rowIndex) => (
-      <div key={rowIndex} style={{ display: 'flex' }}>
-        {row.map((cell, colIndex) => (
-          <div
-            key={colIndex}
-            style={{
-              width: cellSize,
-              height: cellSize,
-              border: '1px solid #ccc',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontSize: '1rem',
-              fontFamily: 'monospace',
-              backgroundColor: '#fff',
-              color: cell.isMine ? 'red' : 'black',
-            }}
-          >
-            {cell.isMine ? 'X' : cell.clue === 0 ? '' : cell.clue}
-          </div>
-        ))}
+      <div key={rowIndex} className="ms-row">
+        {row.map((cell, colIndex) => {
+          const colorClass = cell.isMine ? 'mine' : 'safe';
+          return (
+            <div key={colIndex} className={`ms-cell ${colorClass}`}>
+              {cell.isMine ? 'X' : cell.clue === 0 ? '' : cell.clue}
+            </div>
+          );
+        })}
       </div>
     ));
 
   return (
     <>
-      <p>Grid: {rows} × {cols} | Mines: {mines}</p>
+      <p>
+        Grid: {rows} × {cols} | Mines: {mines}
+      </p>
       {renderBoard()}
-   </>
+    </>
   );
 };
 
