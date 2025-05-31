@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import Cell from './Cell';
+import './Widget.css';
+import Cell from './Cell/Cell';
 
 interface ApiOfferWrapper {
   image?: string;
   offer: {
     name: string;
-    price: string;            
+    price: string;
     currency_iso: string;
     link: string;
   };
@@ -26,7 +27,7 @@ interface ApiResponse {
 const WIDGET_API =
   'https://search-api.fie.future.net.uk/widget.php?model_name=xbox_one_s&area=US&rows=10';
 
-const Widget: React.FC =()=> {
+const Widget =()=> {
   const [offers, setOffers] = useState<ApiOfferWrapper[]>([]);
   const [error, setError] = useState<string | null>(null);
 
@@ -48,17 +49,9 @@ const Widget: React.FC =()=> {
     return <div style={{ color: 'red' }}>{error}</div>;
   }
 
- return (
-    <div style={{ padding: '1rem' }}>
-      <div
-        style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(5, 1fr)',
-          gap: '0.5rem',
-          borderTop: '2px solid #ccc',
-          borderLeft: '2px solid #ccc',
-        }}
-      >
+  return (
+    <>
+      <div className="widget-grid">
         {/* Header Row */}
         {['Image', 'Name', 'Price', 'Merchant', 'Link'].map(hdr => (
           <Cell key={hdr} header>
@@ -69,31 +62,54 @@ const Widget: React.FC =()=> {
         {/* Data Rows */}
         {offers.map((item, i) => (
           <React.Fragment key={i}>
+            {/* 1) Image */}
             <Cell>
               {item.image ? (
-                <img src={item.image} alt={item.offer.name} style={{ maxWidth: 80 }} />
-              ) : '–'}
+                <img
+                  src={item.image}
+                  alt={item.offer.name}
+                  style={{ maxWidth: 80 }}
+                />
+              ) : (
+                '–'
+              )}
             </Cell>
+
+            {/* 2) Name */}
             <Cell>{item.offer.name}</Cell>
+
+            {/* 3) Price */}
             <Cell>
               {item.offer.currency_iso} {item.offer.price}
             </Cell>
+
+            {/* 4) Merchant */}
             <Cell>
               {item.merchant.logo_url ? (
-                <img src={item.merchant.logo_url} alt={item.merchant.name} style={{ maxHeight: 50 }} />
+                <img
+                  src={item.merchant.logo_url}
+                  alt={item.merchant.name}
+                  style={{ maxHeight: 50 }}
+                />
               ) : (
                 item.merchant.name
               )}
             </Cell>
+
+            {/* 5) Link */}
             <Cell>
-              <a href={item.offer.link} target="_blank" rel="noopener noreferrer">
+              <a
+                href={item.offer.link}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 View
               </a>
             </Cell>
           </React.Fragment>
         ))}
       </div>
-    </div>
+    </>
   );
 }
 

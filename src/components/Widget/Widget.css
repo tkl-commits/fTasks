@@ -1,0 +1,7 @@
+.widget-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0.5rem;
+  border-top: 2px solid #ccc;
+  border-left: 2px solid #ccc;
+}

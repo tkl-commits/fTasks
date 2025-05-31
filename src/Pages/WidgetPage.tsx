@@ -1,12 +1,13 @@
 import React from 'react';
 import Widget from '../components/Widget/Widget';
 
+
 const WidgetPage: React.FC = () => {
   return (
-    <div style={{ padding: '1rem' }}>
-      <h3>Product Offers</h3>
+    <>
+      <h2>Product Offers</h2>
       <Widget />
-    </div>
+    </>
   );
 };
 
